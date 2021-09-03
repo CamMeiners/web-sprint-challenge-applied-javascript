@@ -1,4 +1,3 @@
-const Card = (article) => {
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -16,10 +15,37 @@ const Card = (article) => {
   //     <span>By { authorName }</span>
   //   </div>
   // </div>
-  //
+
+import axios from "axios";
+
+
+const Card = (article) => {
+const card = document.createElement('div');
+const head = document.createElement('div');
+const auth = document.createElement('div');
+const imgContainer = document.createElement('div');
+const img1 = document.createElement('img');
+const author = document.createElement('span');
+
+card.classList.add('card');
+head.classList.add('headline');
+auth.classList.add('author');
+imgContainer.classList.add('img-container');
+
+head.textContent = article.headline;
+img1.src = article.authorPhoto;
+author.textContent = article.authorName;
+
+card.appendChild(head);
+card.appendChild(auth);
+auth.appendChild(imgContainer);
+imgContainer.appendChild(img1);
+auth.appendChild(author);
+
+return card
 }
 
-const cardAppender = (selector) => {
+
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
@@ -28,6 +54,32 @@ const cardAppender = (selector) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+
+const cardAppender = (selector) => {
+  const parent = document.querySelector(selector)
+axios.get(`http://localhost:5000/api/articles`)
+.then(res => {
+  const wetCode = res.data;
+  console.log(wetCode);
+  const bootStrap = wetCode.articles.bootstrap;
+  const javaScript = wetCode.articles.javascript;
+  const jqueery = wetCode.articles.jquery;
+  const node = wetCode.articles.node;
+  const techno = wetCode.articles.technology;
+
+  function buildCards(funnyTings){
+    funnyTings.forEach(element => {
+      const currentCard = Card(element);
+        parent.appendChild(currentCard)
+
+    })
+  }
+buildCards(bootStrap);
+buildCards(javaScript);
+buildCards(jqueery);
+buildCards(node);
+buildCards(techno);
+})
 }
 
 export { Card, cardAppender }
